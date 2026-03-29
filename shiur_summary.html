@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סיכום שיעור — תהליכים עסקיים ו-AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --card: #ffffff;
+    --text: #1a1a18;
+    --muted: #6b6b64;
+    --border: #e2dfd8;
+    --purple-bg: #eeedfe;
+    --purple-text: #3c3489;
+    --teal-bg: #e1f5ee;
+    --teal-text: #085041;
+    --blue-bg: #e6f1fb;
+    --blue-text: #0c447c;
+    --amber-bg: #faeeda;
+    --amber-text: #633806;
+    --coral-bg: #faece7;
+    --coral-text: #712b13;
+    --green-bg: #eaf3de;
+    --green-text: #27500a;
+    --red-bg: #fcebeb;
+    --red-text: #791f1f;
+    --accent: #3c3489;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem 1rem;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .header .tag {
+    display: inline-block;
+    background: var(--purple-bg);
+    color: var(--purple-text);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    letter-spacing: .04em;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: .5rem;
+    line-height: 1.2;
+  }
+  .header p {
+    font-size: 1rem;
+    color: var(--muted);
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 2.5rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: 1.25rem;
+  }
+  .section-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Cards grid */
+  .cards { display: flex; flex-direction: column; gap: .75rem; }
+  .cards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+
+  /* Concept card */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.1rem 1.25rem;
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s;
+    position: relative;
+  }
+  .card:hover { border-color: #bbb; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .card-head { display: flex; align-items: flex-start; gap: .85rem; }
+  .card-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    letter-spacing: .03em;
+  }
+  .card-content { flex: 1; }
+  .card-term { font-size: 15px; font-weight: 700; margin-bottom: .3rem; }
+  .card-analogy {
+    font-size: 13px; color: var(--muted); margin-bottom: .5rem;
+    padding-right: .75rem;
+    border-right: 2px solid var(--border);
+    font-style: italic;
+  }
+  .card-toggle {
+    font-size: 11px; color: #aaa;
+    display: flex; align-items: center; gap: 4px;
+    user-select: none;
+  }
+  .card-toggle::before { content: '▼'; font-size: 9px; transition: transform .2s; }
+  .card.open .card-toggle::before { transform: rotate(180deg); }
+  .card-def {
+    display: none;
+    margin-top: .85rem;
+    padding-top: .85rem;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px;
+    color: #333;
+    line-height: 1.7;
+  }
+  .card.open .card-def { display: block; }
+
+  /* Mini cards (departments grid) */
+  .mini-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: .9rem 1rem;
+  }
+  .mini-card .dept { font-size: 13px; font-weight: 700; margin-bottom: .3rem; }
+  .mini-card .dept-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Flow row */
+  .flow-label { font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: .5rem; }
+  .flow-row {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1rem;
+  }
+  .flow-step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 13px; font-weight: 500;
+  }
+  .flow-step.bad { border-color: #f09595; background: var(--red-bg); color: var(--red-text); }
+  .flow-step.good { border-color: #9fe1cb; background: var(--teal-bg); color: var(--teal-text); }
+  .flow-arr { color: #bbb; font-size: 16px; }
+
+  /* ROI box */
+  .roi-box {
+    background: var(--green-bg);
+    border: 1px solid #9fe1cb;
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    margin-top: 1rem;
+  }
+  .roi-formula { font-size: 16px; font-weight: 700; color: var(--green-text); margin-bottom: .4rem; }
+  .roi-note { font-size: 13px; color: #3b6d11; }
+
+  /* Presentation steps */
+  .pres-steps { counter-reset: step; display: flex; flex-direction: column; gap: .6rem; }
+  .pres-step {
+    display: flex; gap: .85rem; align-items: flex-start;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: .9rem 1rem;
+  }
+  .pres-step-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--purple-bg); color: var(--purple-text);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .pres-step-body .title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .pres-step-body .desc { font-size: 12px; color: var(--muted); }
+
+  /* Tip box */
+  .tip-box {
+    background: var(--amber-bg);
+    border-radius: 12px;
+    padding: .85rem 1.1rem;
+    font-size: 13px;
+    color: var(--amber-text);
+    margin-top: .75rem;
+  }
+  .tip-box strong { font-weight: 700; }
+
+  /* Bottom summary */
+  .takeaways {
+    background: var(--purple-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  .takeaways h3 { font-size: 15px; font-weight: 700; color: var(--purple-text); margin-bottom: 1rem; }
+  .takeaway { display: flex; gap: .75rem; margin-bottom: .75rem; align-items: flex-start; }
+  .takeaway-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--purple-text); flex-shrink: 0; margin-top: 6px;
+  }
+  .takeaway-text { font-size: 14px; color: var(--purple-text); line-height: 1.55; }
+  .takeaway-text strong { font-weight: 700; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  footer { text-align: center; font-size: 12px; color: #bbb; margin-top: 3rem; }
+
+  @media (max-width: 580px) {
+    .cards-2 { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.6rem; }
+    .flow-row { flex-direction: column; align-items: flex-end; }
+    .flow-arr { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="tag">AI Solutions Architect — סיכום שיעור</div>
+    <h1>תהליכים עסקיים ו-AI</h1>
+    <p>כל מה שצריך לדעת, בעברית פשוטה, עם אנלוגיות</p>
+  </div>
+
+  <!-- PART 1 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--purple-bg);color:var(--purple-text);">א</div>
+      <div>
+        <div class="section-title">מושגי יסוד</div>
+        <div class="section-sub">לחץ על כל כרטיס לפרטים</div>
+      </div>
+    </div>
+
+    <div class="cards">
+
+      <div class="card" onclick="this.classList.toggle('open')">
+        <div class="card-head">
+          <span class="card-badge" style="background:var(--purple-bg);color:var(--purple-text);">מושג 1</span>
+          <div class="card-content">
+            <div class="card-term">תהליך עסקי (Business Process)</div>
+            <div class="card-analogy">כמו מסעדה: מהרגע שלקוח נכנס, דרך ההזמנה, הכנת האוכל, עד שהצלחת מגיעה לשולחן. כל שלב עשוי ע"י מישהו אחר.</div>
+            <div class="card-toggle">הרחבה</div>
+          </div>
+        </div>
+        <div class="card-def">
+          רצף פעולות מסודר שמייצר ערך לחברה. בחברת SaaS יש שלושה תהליכים מרכזיים: <strong>תהליך מכירה</strong> (מ-Lead ועד לחתימה), <strong>Onboarding</strong> (מהרגע שהלקוח חתם עד שהוא משתמש בפועל), ו<strong>שירות לקוחות</strong> שוטף. כל תהליך חוצה כמה מחלקות — Sales מעביר ל-CS, CS עובד מול R&D — וכשהעברת המידע בין מחלקות נשברת, התהליך כולו מתקפל.
+        </div>
+      </div>
+
+      <div class="card" onclick="this.classList.toggle('open')">
+        <div class="card-head">
+          <span class="card-badge" style="background:var(--purple-bg);color:var(--purple-text);">מושג 2</span>
+          <div class="card-content">
+            <div class="card-term">מיפוי תהליך (Process Mapping)</div>
+            <div class="card-analogy">כמו לצלם את המסעדה ממצלמת רחפן: פתאום רואים מה שלא ראית מבפנים — כמה פעמים מלצר חוצה את האולם לשווא, איפה נוצרות תורים.</div>
+            <div class="card-toggle">הרחבה</div>
+          </div>
+        </div>
+        <div class="card-def">
+          שרטוט חזותי של כל שלבי תהליך — מי עושה מה, באיזה סדר, ועם אילו כלים. שלושת השלבים: <strong>(1) מי עושה מה</strong> — כל הצעדים הבסיסיים, <strong>(2) מי מעורב</strong> — כמה גורמים שונים מעורבים בכל צעד, <strong>(3) באיזה כלים</strong> — Swimlane, BPMN. המטרה: לזהות את "צוואר הבקבוק" לפני שמביאים AI — כי AI על תהליך שבור רק שובר אותו מהר יותר.
+        </div>
+      </div>
+
+      <div class="cards-2">
+        <div class="card" onclick="this.classList.toggle('open')">
+          <div class="card-head">
+            <span class="card-badge" style="background:var(--teal-bg);color:var(--teal-text);">כלי</span>
+            <div class="card-content">
+              <div class="card-term">Swimlane Diagram</div>
+              <div class="card-analogy">כמו בריכת שחייה עם נתיבים: כל מחלקה = נתיב. רואים בדיוק מתי הכדור עובר בין נתיבים.</div>
+              <div class="card-toggle">הרחבה</div>
+            </div>
+          </div>
+          <div class="card-def">
+            דיאגרמה שמחלקת פעולות לפי אחריות. כל שורה = מחלקה. החצים בין השורות = העברת מידע. הכלי הכי טוב לזהות איפה מידע "נאבד" בין מחלקות — המקום שבו הכי הרבה כשלים קורים.
+          </div>
+        </div>
+
+        <div class="card" onclick="this.classList.toggle('open')">
+          <div class="card-head">
+            <span class="card-badge" style="background:var(--teal-bg);color:var(--teal-text);">כלי</span>
+            <div class="card-content">
+              <div class="card-term">BPMN Diagram</div>
+              <div class="card-analogy">כמו תרשים חשמלי — כל חשמלאי בעולם מבין את אותם הסמלים בדיוק.</div>
+              <div class="card-toggle">הרחבה</div>
+            </div>
+          </div>
+          <div class="card-def">
+            Business Process Model and Notation — שפה ויזואלית סטנדרטית. סמלים קבועים: עיגול = התחלה/סיום, מרובע = פעולה, מעויין = נקודת החלטה. יותר פורמלי מ-Swimlane, משמש לתיעוד מדויק לפני אוטומציה.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PART 2 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--teal-bg);color:var(--teal-text);">ב</div>
+      <div>
+        <div class="section-title">מחלקות ומערכות בחברה</div>
+        <div class="section-sub">מי עושה מה, ואיפה הבעיה</div>
+      </div>
+    </div>
+
+    <div class="cards-2" style="margin-bottom:.75rem;">
+      <div class="mini-card">
+        <div class="dept">Product</div>
+        <div class="dept-desc">מגדיר <em>מה</em> לבנות ו<em>למה</em>. מתרגם צורכי לקוח לדרישות טכניות שR&D יממש.</div>
+      </div>
+      <div class="mini-card">
+        <div class="dept">R&D</div>
+        <div class="dept-desc">בונה את המוצר. פיתוח, בדיקות, תחזוקה. מקבל דרישות מ-Product ומדבר מול הטכנולוגיה.</div>
+      </div>
+      <div class="mini-card">
+        <div class="dept">Sales</div>
+        <div class="dept-desc">מוצא לקוחות ומוכר. מוליד עסקה ומעביר אותה ל-CS עם סגירת החוזה.</div>
+      </div>
+      <div class="mini-card">
+        <div class="dept">Customer Success</div>
+        <div class="dept-desc">שומר שהלקוח מצליח: Onboarding, תמיכה שוטפת, חידוש חוזה שנתי.</div>
+      </div>
+      <div class="mini-card">
+        <div class="dept">Marketing</div>
+        <div class="dept-desc">יוצר ביקוש — מביא לידים ל-Sales ובונה את המותג לאורך זמן.</div>
+      </div>
+      <div class="mini-card">
+        <div class="dept">Finance & Ops</div>
+        <div class="dept-desc">כסף, תכנון, ויעילות תפעולית. הדבק שמחזיק את כל שאר המחלקות.</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="this.classList.toggle('open')">
+      <div class="card-head">
+        <span class="card-badge" style="background:var(--red-bg);color:var(--red-text);">בעיה</span>
+        <div class="card-content">
+          <div class="card-term">Data Silos — כשהמידע לא זורם</div>
+          <div class="card-analogy">כמו מסעדה שבה המלצר לא מדבר עם המטבח, והמטבח לא מדבר עם הקופה — כל אחד יודע חצי מהסיפור.</div>
+          <div class="card-toggle">הרחבה</div>
+        </div>
+      </div>
+      <div class="card-def">
+        כשכל מערכת שומרת מידע בנפרד ואין סנכרון ביניהן. Sales רואה את הלקוח ב-Salesforce, CS ב-Jira, Finance ב-SAP — ואף אחד לא רואה תמונה שלמה. תוצאה: אותו לקוח מקבל שירות שונה מכל מחלקה, ואיש אינו יודע שיש בעיה עד שהלקוח עוזב.
+        <div class="tip-box" style="margin-top:.75rem;"><strong>המערכות הנפוצות:</strong> CRM (Salesforce/HubSpot) לניהול לקוחות, ERP (SAP/Oracle) לניהול משאבים, BI (Tableau/Power BI) לדוחות, Jira/Monday לניהול פרויקטים.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PART 3 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--blue-bg);color:var(--blue-text);">ג</div>
+      <div>
+        <div class="section-title">איך AI נכנס לתמונה</div>
+        <div class="section-sub">הדוגמה: תהליך Onboarding לקוח ב-SaaS</div>
+      </div>
+    </div>
+
+    <div class="flow-label" style="color:var(--red-text);">לפני AI — ידני ואיטי:</div>
+    <div class="flow-row">
+      <div class="flow-step bad">עסקה נסגרת</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step bad">Email ידני ל-CS</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step bad">Kickoff — שבוע המתנה</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step bad">הגדרת חשבון — 5 ימים</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step bad">לקוח מתחיל — 4 שבועות</div>
+    </div>
+
+    <div class="flow-label" style="color:var(--teal-text);">אחרי AI — אוטומטי ומהיר:</div>
+    <div class="flow-row">
+      <div class="flow-step good">עסקה נסגרת</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step good">Trigger אוטומטי מ-CRM</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step good">AI מגדיר חשבון — דקות</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step good">Flow מותאם ללקוח</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step good">לקוח מצליח — יומיים</div>
+    </div>
+
+    <div class="cards-2" style="margin-top:.5rem;">
+      <div class="card" onclick="this.classList.toggle('open')">
+        <div class="card-head">
+          <span class="card-badge" style="background:var(--green-bg);color:var(--green-text);">AI כן</span>
+          <div class="card-content">
+            <div class="card-term">מה AI עושה טוב</div>
+            <div class="card-analogy">כמו פקיד בנק שמעבד 1,000 טפסים ביום בלי לטעות — אל תשלח אותו לנהל משא ומתן.</div>
+            <div class="card-toggle">הרחבה</div>
+          </div>
+        </div>
+        <div class="card-def">
+          הגדרת חשבונות אוטומטית, ניטור שימוש בזמן אמת, התראות על לקוח שעומד לעזוב (churn), onboarding גנרי לאלפי לקוחות בו-זמנית, ניתוח נתונים וקבלת החלטות מבוססת דאטה.
+        </div>
+      </div>
+      <div class="card" onclick="this.classList.toggle('open')">
+        <div class="card-head">
+          <span class="card-badge" style="background:var(--red-bg);color:var(--red-text);">AI לא</span>
+          <div class="card-content">
+            <div class="card-term">מה נשאר לבני אדם</div>
+            <div class="card-analogy">כמו רופא — AI יכול לנתח תוצאות בדיקות, אבל ההחלטה הרפואית נשארת אצל הרופא.</div>
+            <div class="card-toggle">הרחבה</div>
+          </div>
+        </div>
+        <div class="card-def">
+          משא ומתן עם לקוחות VIP, טיפול במצבי משבר, קבלת החלטות אסטרטגיות, יחסי אנוש עדינים שדורשים אמפתיה. CS האנושי לא נעלם — הוא פנוי עכשיו לעבודה שבאמת דורשת אותו.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PART 4 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--amber-bg);color:var(--amber-text);">ד</div>
+      <div>
+        <div class="section-title">ROI ומצגת להנהלה</div>
+        <div class="section-sub">איך מוכרים AI בתוך ארגון</div>
+      </div>
+    </div>
+
+    <div class="cards">
+
+      <div class="card" onclick="this.classList.toggle('open')">
+        <div class="card-head">
+          <span class="card-badge" style="background:var(--amber-bg);color:var(--amber-text);">מושג</span>
+          <div class="card-content">
+            <div class="card-term">ROI — Return on Investment</div>
+            <div class="card-analogy">כמו מכונת קפה חדשה לבית קפה: עלתה ₪50K, חסכה 3 שעות עבודה ביום — אחרי 4 חודשים "החזירה" את עצמה.</div>
+            <div class="card-toggle">הרחבה</div>
+          </div>
+        </div>
+        <div class="card-def">
+          מדד לכדאיות השקעה. בהקשר של AI: <strong>כמה חסכת בעלות</strong> (פחות שעות ידניות) + <strong>כמה הכנסה שמרת</strong> (פחות לקוחות עוזבים) — חלקי כמה השקעת בפיתוח. דוגמה: השקעת ₪180K בפיתוח AI → חסכת ₪1M בשנה → ROI של 456%. ה-<strong>Payback Period</strong> (הזמן עד ההחזר) חשוב לא פחות — הנהלה רוצה לדעת: מתי הכסף חוזר?
+        </div>
+      </div>
+
+      <div class="card" onclick="this.classList.toggle('open')">
+        <div class="card-head">
+          <span class="card-badge" style="background:var(--coral-bg);color:var(--coral-text);">מושג</span>
+          <div class="card-content">
+            <div class="card-term">Churn Rate — קצב נטישת לקוחות</div>
+            <div class="card-analogy">כמו דלי עם חור — לא משנה כמה מים שופכים פנימה, אם החור גדול מספיק הדלי תמיד ריק.</div>
+            <div class="card-toggle">הרחבה</div>
+          </div>
+        </div>
+        <div class="card-def">
+          אחוז הלקוחות שעוזבים בתקופה מסוימת. 18% churn שנתי = 18 מתוך 100 לקוחות עוזבים. בחברת SaaS — זה הרג. הסיבה הגדולה ביותר ל-churn: הלקוח לא ראה ערך מהיר מספיק אחרי הרכישה. Onboarding טוב עם AI = לקוח מצליח תוך יומיים במקום חודש = פחות churn = יותר הכנסה.
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:1.25rem;">
+      <div class="flow-label">מבנה מצגת ROI להנהלה — 6 שקפים:</div>
+      <div class="pres-steps">
+        <div class="pres-step">
+          <div class="pres-step-num">1</div>
+          <div class="pres-step-body">
+            <div class="title">הבעיה — פתח עם הכאב שלהם</div>
+            <div class="desc">אל תפתח עם "AI מגניב". פתח עם: "הOnboarding לוקח 4 שבועות ו-18% מהלקוחות עוזבים בשנה הראשונה".</div>
+          </div>
+        </div>
+        <div class="pres-step">
+          <div class="pres-step-num">2</div>
+          <div class="pres-step-body">
+            <div class="title">גודל הבעיה — מספרים של החברה שלכם</div>
+            <div class="desc">לא "מחקרים מראים". מקור: Salesforce + Jira + ריאיונות עם CSMs. מספרים אמיתיים = אמינות.</div>
+          </div>
+        </div>
+        <div class="pres-step">
+          <div class="pres-step-num">3</div>
+          <div class="pres-step-body">
+            <div class="title">הפתרון — לפני ואחרי</div>
+            <div class="desc">תרשים פשוט: היום vs. עם AI. לא מה הטכנולוגיה — מה התוצאה לתהליך.</div>
+          </div>
+        </div>
+        <div class="pres-step">
+          <div class="pres-step-num">4</div>
+          <div class="pres-step-body">
+            <div class="title">ROI — שלושה מספרים בלבד</div>
+            <div class="desc">חיסכון שנתי + שמירת הכנסה מ-churn + Payback period. יותר ממזה — מבלבל.</div>
+          </div>
+        </div>
+        <div class="pres-step">
+          <div class="pres-step-num">5</div>
+          <div class="pres-step-body">
+            <div class="title">סיכונים — השקף שרוב האנשים מדלגים עליו</div>
+            <div class="desc">להכיר בסיכון = אמינות. הצג סיכון + איך מנהלים אותו. זה מה שמבדיל מישהו שחשב לעומק ממי שמוכר חלומות.</div>
+          </div>
+        </div>
+        <div class="pres-step">
+          <div class="pres-step-num">6</div>
+          <div class="pres-step-body">
+            <div class="title">בקשה — אחת, ספציפית</div>
+            <div class="desc">לא "בואו נחשוב". בדיוק: "אישור ₪40K ו-6 שבועות לפיילוט עם 20 לקוחות — ואז מחליטים".</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="roi-box">
+      <div class="roi-formula">ROI = חיסכון בזמן + שמירת הכנסה מ-churn</div>
+      <div class="roi-note">ההנהלה לא קונה AI — היא קונה Payback Period של 4 חודשים. תמיד תדע לתרגם את הפתרון למספרים.</div>
+    </div>
+  </div>
+
+  <!-- Takeaways -->
+  <div class="takeaways">
+    <h3>3 דברים לזכור מהשיעור הזה</h3>
+    <div class="takeaway">
+      <div class="takeaway-dot"></div>
+      <div class="takeaway-text"><strong>מיפוי לפני AI.</strong> אף פעם לא מביאים טכנולוגיה לתהליך שבור. קודם מבינים איפה הוא נשבר, ורק אז מחליטים אם ואיפה AI עוזר.</div>
+    </div>
+    <div class="takeaway">
+      <div class="takeaway-dot"></div>
+      <div class="takeaway-text"><strong>AI מחליף משימות, לא אנשים.</strong> CS לא נעלם — הוא פנוי עכשיו לעבודה שבאמת דורשת שיפוט אנושי ויחסים.</div>
+    </div>
+    <div class="takeaway">
+      <div class="takeaway-dot"></div>
+      <div class="takeaway-text"><strong>ROI זו השפה של ההנהלה.</strong> הם לא רוצים לשמוע על Large Language Models. הם רוצים Payback Period של 4 חודשים ומספרים מהחברה שלהם.</div>
+    </div>
+  </div>
+
+  <footer>נוצר עבור קורס AI Solutions Architect — HackerU</footer>
+
+</div>
+
+<script>
+</script>
+</body>
+</html>
